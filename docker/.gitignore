@@ -4,3 +4,4 @@ volumes/storage
 test.http
 docker-compose.override.yml
 ssl/*
+!ssl/.gitkeep
