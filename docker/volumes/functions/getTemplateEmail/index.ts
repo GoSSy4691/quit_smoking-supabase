@@ -4,7 +4,6 @@ serve(async () => {
     const template = `
         <html>
             <body>
-                <h2>Подтверждение почты</h2>
                 <p>Введите код в приложении: <b>{{ .Token }}</b></p>
             </body>
         </html>
