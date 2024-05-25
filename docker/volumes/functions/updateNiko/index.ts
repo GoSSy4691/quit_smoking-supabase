@@ -72,7 +72,7 @@ serve(async (req: Request) => {
       console.error('Error inserting data:', updateResult.error);
       return jsonResponse({ 
         result: false, 
-        error: "error inserting question",
+        error: "error inserting data",
         //message: updateResult.error // debug
       }, 500);
     }
