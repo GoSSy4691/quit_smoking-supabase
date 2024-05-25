@@ -51,13 +51,15 @@ serve(async (req: Request) => {
     // get old user questions and historys and update them to new user id
     const oldUserQuestions = await getAndUpdateQuestionsByOldUserId(supabaseClient, oldUserLocalId, newUserId);
     const oldUserHistorys = await getAndUpdateHistorysByOldUserId(supabaseClient, oldUserLocalId, newUserId);
+    const oldUser = await getAndUpdateUserByOldUserId(supabaseClient, oldUserLocalId, newUserId);
 
     return jsonResponse({ 
       "newUserId" :newUserId, 
       "oldUserId" :oldUserLocalId, 
       "updatedData": {
         oldUserQuestions, 
-        oldUserHistorys 
+        oldUserHistorys,
+        oldUser
       }
     }, 200);
   } catch (error) {
@@ -131,6 +133,33 @@ async function getAndUpdateHistorysByOldUserId(supabaseClient, oldUserId, newUse
   if (data && data.length > 0) {
     const { updateData, updateError } = await supabaseClient
       .from('historys')
+      .update({ uid: newUserId })
+      .eq('uid', oldUserId);
+    if (updateError) {
+      console.error('Error updating data:', updateError);
+      throw new Error("Error updating old user questions");
+    }
+    console.log(updateData);
+  }
+
+  return data || null;
+}
+
+async function getAndUpdateUserByOldUserId(supabaseClient, oldUserId, newUserId) {
+  // get
+  const { data, error } = await supabaseClient
+    .from('users')
+    .select('*')
+    .eq('uid', oldUserId);
+  if (error) {
+    console.error('Error fetching data:', error);
+    throw new Error("Error fetching old user historys");
+  }
+
+  // update
+  if (data && data.length > 0) {
+    const { updateData, updateError } = await supabaseClient
+      .from('users')
       .update({ uid: newUserId })
       .eq('uid', oldUserId);
     if (updateError) {
