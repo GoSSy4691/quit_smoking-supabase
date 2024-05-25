@@ -77,7 +77,7 @@ serve(async (req: Request) => {
       }, 500);
     }
 
-    return jsonResponse({ result: true, message: "data added successfully", body: result, userId: userId, updateResult: updateResult }, 200);
+    return jsonResponse({ result: true, message: "data added successfully", body: result }, 200);
   } catch (error) {
     console.error("An error occurred:", error.message);
     return jsonResponse({ 
