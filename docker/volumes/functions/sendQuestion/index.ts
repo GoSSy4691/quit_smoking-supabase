@@ -63,7 +63,6 @@ serve(async (req: Request) => {
     const insertResult = await supabaseClient
     .from('questions')
     .insert(result);
-
     if (insertResult.error) {
       console.error('Error inserting data:', insertResult.error);
       return jsonResponse({ 

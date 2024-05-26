@@ -67,12 +67,11 @@ serve(async (req: Request) => {
     .from('users')
     .update(result)
     .eq('uid', userId);
-
     if (updateResult.error) {
-      console.error('Error inserting data:', updateResult.error);
+      console.error('error updating data:', updateResult.error);
       return jsonResponse({ 
         result: false, 
-        error: "error inserting data",
+        error: "error updating data",
         //message: updateResult.error // debug
       }, 500);
     }
