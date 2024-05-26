@@ -126,7 +126,7 @@ serve(async (req: Request) => {
       }, 404);
     }
 
-    // insert the new data into the database
+    // new data into the database
     const updateResult = await supabaseClient
     .from('users')
     .insert(result);

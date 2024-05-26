@@ -59,7 +59,7 @@ serve(async (req: Request) => {
       mail_sent: mail_sent ?? null
     }
 
-    // insert the new data into the database
+    // new data into the database
     const insertResult = await supabaseClient
     .from('questions')
     .insert(result);

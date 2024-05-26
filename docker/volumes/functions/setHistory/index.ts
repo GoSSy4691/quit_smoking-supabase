@@ -65,7 +65,7 @@ serve(async (req: Request) => {
       date_timestamp: dateTimestamp
     }
 
-    // insert the new data into the database
+    // new data into the database
     const insertResult = await supabaseClient
     .from('historys')
     .insert(result);
