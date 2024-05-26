@@ -31,7 +31,7 @@ serve(async (req: Request) => {
 
     const questions = await getQuestionsByUserId(supabaseClient, userId);
 
-    return jsonResponse({ questions }, 200);
+    return jsonResponse({result: true, questions }, 200);
   } catch (error) {
     console.error("An error occurred:", error.message);
     return jsonResponse({ 

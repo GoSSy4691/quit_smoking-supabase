@@ -31,7 +31,7 @@ serve(async (req: Request) => {
 
     const historys = await getHistorysByUserId(supabaseClient, userId);
 
-    return jsonResponse({ historys }, 200);
+    return jsonResponse({result: true, historys }, 200);
   } catch (error) {
     console.error("An error occurred:", error.message);
     return jsonResponse({ 

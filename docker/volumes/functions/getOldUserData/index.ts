@@ -52,7 +52,7 @@ serve(async (req: Request) => {
     const oldUserQuestions = await getQuestionsByOldUserId(supabaseClient, oldUserId);
     const oldUserHistorys = await getHistorysByOldUserId(supabaseClient, oldUserId);
 
-    return jsonResponse({ oldUserData, oldUserQuestions, oldUserHistorys }, 200);
+    return jsonResponse({result: true, oldUserData, oldUserQuestions, oldUserHistorys }, 200);
   } catch (error) {
     console.error("An error occurred:", error.message);
     return jsonResponse({ 

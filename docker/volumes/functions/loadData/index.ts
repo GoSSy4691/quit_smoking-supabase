@@ -36,7 +36,7 @@ serve(async (req: Request) => {
     }
     const userId = data.user.id;
 
-    // Check if user exists
+    // Check if user exists and get all data
     const { data: userData, error: userError } = await supabaseClient
     .from('users')
     .select('*')

@@ -53,7 +53,8 @@ serve(async (req: Request) => {
     const oldUserHistorys = await getAndUpdateHistorysByOldUserId(supabaseClient, oldUserLocalId, newUserId);
     const oldUser = await getAndUpdateUserByOldUserId(supabaseClient, oldUserLocalId, newUserId);
 
-    return jsonResponse({ 
+    return jsonResponse({
+      result: true,
       "newUserId" :newUserId, 
       "oldUserId" :oldUserLocalId, 
       "updatedData": {
