@@ -37,7 +37,7 @@ serve(async (req: Request) => {
     const userId = data.user.id;
 
     const text = await req.text();
-    const { cigg } = JSON.parse(text);
+    const { cigg } = JSON.parse(text); // cigarette
     if (!cigg) {
       return jsonResponse({ 
         result: false, 
