@@ -64,11 +64,11 @@ serve(async (req: Request) => {
       !startDateYear ||
       !startDateMonth ||
       !startDateDay ||
-      !money ||
+      money === undefined ||
       !smol ||
-      !cigg ||
+      cigg === undefined ||
       !niko ||
-      !age
+      age === undefined
     ) {
       return jsonResponse({ 
         result: false, 
