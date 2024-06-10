@@ -58,6 +58,7 @@ serve(async (req: Request) => {
     const { data: historysData, error: userError } = await supabaseClient
     .from('historys')
     .select('*')
+    .order('id', { ascending: true }) // Sort by id in ascending order
     .range(offset, offset + limit - 1);
     if (userError && !historysData) {
       return jsonResponse({ 
