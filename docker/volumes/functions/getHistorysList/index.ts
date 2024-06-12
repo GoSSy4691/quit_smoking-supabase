@@ -41,6 +41,7 @@ serve(async (req: Request) => {
     const params = new URLSearchParams(url.search);
     const limit = parseInt(params.get('limit') || '10', 10);
     const offset = parseInt(params.get('offset') || '0', 10);  
+    const sort = params.get('sort') || 'id';
     if (isNaN(limit) || isNaN(offset)) {
       return jsonResponse({ 
         result: false, 
@@ -53,12 +54,20 @@ serve(async (req: Request) => {
         error: 'max limit is 100' 
       }, 400);
     }
+    // Validate sort parameter
+    const validSortFields = ['id', 'date_timestamp'];
+    if (validSortFields.indexOf(sort) === -1) {
+      return jsonResponse({ 
+        result: false,
+        error: 'Invalid sort parameter'
+      }, 400);
+    }
 
     // get historys
     const { data: historysData, error: userError } = await supabaseClient
     .from('historys')
     .select('*')
-    .order('id', { ascending: true }) // Sort by id in ascending order
+    .order(sort, { ascending: true })
     .range(offset, offset + limit - 1);
     if (userError && !historysData) {
       return jsonResponse({ 
@@ -67,12 +76,8 @@ serve(async (req: Request) => {
         //message: userError.message // debug
       }, 404);
     }
-    const historysDataFormatted = historysData.reduce((acc, history) => {
-      acc[history.id] = history;
-      return acc;
-    }, {});
-
-    return jsonResponse({result: true, historys: historysDataFormatted }, 200);
+    
+    return jsonResponse({result: true, historys: historysData }, 200);
   } catch (error) {
     console.error("An error occurred:", error.message);
     return jsonResponse({ 
