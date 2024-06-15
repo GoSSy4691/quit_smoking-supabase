@@ -42,6 +42,24 @@ serve(async (req: Request) => {
     const limit = parseInt(params.get('limit') || '10', 10);
     const offset = parseInt(params.get('offset') || '0', 10);  
     const sort = params.get('sort') || 'id';
+    const asc = params.get('asc');
+    let ascTyped;
+    switch(asc) {
+      case "false":
+        ascTyped = false;
+        break;
+      case "true":
+        ascTyped = true;
+        break;
+      case null:
+        ascTyped = true;
+        break;
+      default:
+        return jsonResponse({ 
+          result: false,
+          error: 'Invalid asc parameter'
+        }, 400);
+    }
     if (isNaN(limit) || isNaN(offset)) {
       return jsonResponse({ 
         result: false, 
@@ -67,7 +85,7 @@ serve(async (req: Request) => {
     const { data: historysData, error: userError } = await supabaseClient
     .from('historys')
     .select('*')
-    .order(sort, { ascending: true })
+    .order(sort, { ascending: ascTyped })
     .range(offset, offset + limit - 1);
     if (userError && !historysData) {
       return jsonResponse({ 
