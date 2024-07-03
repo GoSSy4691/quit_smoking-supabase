@@ -35,14 +35,14 @@ serve(async (req: Request) => {
     }
 
     // get user data
-    const { dataUser, errorUser } = await supabaseClient.auth.getUser();
-    if (errorUser || !dataUser.user) {
+    const { data, error } = await supabaseClient.auth.getUser();
+    if (error || !data.user) {
       return jsonResponse({ 
         result: false, 
         error: "unauthorized user"
       }, 401);
     }
-    const userId = dataUser.user.id;
+    const userId = data.user.id;
 
     const { errorRmv } = await supabaseAdminClient.auth.admin.deleteUser(userId);
     if (errorRmv) {
