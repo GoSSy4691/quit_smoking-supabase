@@ -148,7 +148,7 @@ serve(async (req: Request) => {
         message: "user created successfully",
         access_token: access_token,
         refresh_token: refresh_token,
-        userData: user,
+        user: user,
         generated_password: password
       }, 200);
     }
