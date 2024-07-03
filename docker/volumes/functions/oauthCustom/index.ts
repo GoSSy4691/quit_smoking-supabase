@@ -110,7 +110,7 @@ serve(async (req: Request) => {
           // errorMessage: signUpError // debug
         }, 500);
       }
-      const { access_token, refresh_token, user } = signUpData.session;
+      const { access_token, refresh_token, user, expires_at } = signUpData.session;
 
       // init data to db
       const insertData = {
@@ -149,7 +149,8 @@ serve(async (req: Request) => {
         access_token: access_token,
         refresh_token: refresh_token,
         user: user,
-        generated_password: password
+        generated_password: password,
+        expires_at: expires_at
       }, 200);
     }
     
