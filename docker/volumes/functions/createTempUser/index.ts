@@ -23,46 +23,14 @@ serve(async (req: Request) => {
     // connect to supabase
     const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
     const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY") ?? "";
-    const supabaseServiceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
     const supabaseClient = createClient(
       supabaseUrl,
       supabaseAnonKey,
       { global: { headers: { Authorization: token } } }
     );
-    const supabaseAdminClient = createClient(
-      supabaseUrl, 
-      supabaseServiceRoleKey
-    );
     
-    // find last exist user
-    const { data: users, error } = await supabaseAdminClient
-    .from('users')
-    .select('email')
-    .ilike('email', 'temp_user_%@mail.com')
-    .order('email', { ascending: false })
-    .limit(1);
-
-    if (error) {
-      return jsonResponse({ 
-        result: false, 
-        error: "internal list error",
-        // error: error // debug
-      }, 500);
-    }
-
-    // Determine the new user's email
-    let newUserNumber = 1;
-    if (users.length > 0) {
-      const lastUserEmail = users[0].email;
-      const match = lastUserEmail.match(/temp_user_(\d+)@mail\.com/);
-      if (match) {
-        const lastUserNumber = parseInt(match[1], 10);
-        newUserNumber = lastUserNumber + 1;
-      }
-    }
-    const newUserEmail = `temp_user_${padNumber(newUserNumber, 4)}@mail.com`;
-
     // create new user
+    const newUserEmail = `temp_user_${generateRandomNumber()}@mail.com`;
     const password = generateRandomPassword()
       const { data: signUpData, error: signUpError } = await supabaseClient.auth.signUp({
         email: newUserEmail,
@@ -120,11 +88,6 @@ const generateRandomPassword = (length = 12) => {
   return password
 }
 
-// Manual padding function
-function padNumber(number: number, length: number): string {
-  let str = number.toString();
-  while (str.length < length) {
-    str = '0' + str;
-  }
-  return str;
+function generateRandomNumber() {
+  return Math.floor(10000000 + Math.random() * 90000000);
 }
