@@ -53,7 +53,8 @@ serve(async (req: Request) => {
       age,
       name,     // optional
       currency, // optional
-      isPro     // optional
+      isPro,     // optional
+      email     // optional
     } = JSON.parse(text);
     if (
       !selectedDateYear ||
@@ -75,6 +76,12 @@ serve(async (req: Request) => {
         error: "some data is missing in request body"
       }, 400);
     }
+    if (email && !isValidEmail(email)) {
+      return jsonResponse({ 
+        result: false, 
+        error: "invalid email"
+      }, 400);
+    }
 
     const result = {
       uid: userId,
@@ -93,7 +100,9 @@ serve(async (req: Request) => {
       age: age,
       name: null,
       currency: null,
-      isPro: null
+      isPro: null,
+      emailOuter: null,
+      created_at: null
     }
     if (name) {
       result.name = name;
@@ -104,6 +113,13 @@ serve(async (req: Request) => {
     if (isPro === true || isPro === false) {
       result.isPro = isPro;
     }
+    if (email) {
+      result.emailOuter = email;
+    }
+
+    const dateNow = new Date();
+    const dateTimestamp = dateNow.getTime();
+    result.created_at = dateTimestamp;
 
     // Check if user exists
     const { data: userData, error: userError } = await supabaseClient
@@ -155,4 +171,9 @@ function jsonResponse(body: Record<string, any>, status: number) {
     headers: { 'Content-Type': 'application/json' },
     status,
   });
+}
+
+function isValidEmail(email) {
+  const emailRegex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+  return emailRegex.test(email);
 }
