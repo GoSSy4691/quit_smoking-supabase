@@ -35,6 +35,7 @@ serve(async (req: Request) => {
       }, 401);
     }
     const userId = data.user.id;
+    const userEmailInner = data.user.email;
 
     const text = await req.text();
     const { 
@@ -53,8 +54,7 @@ serve(async (req: Request) => {
       age,
       name,     // optional
       currency, // optional
-      isPro,     // optional
-      email     // optional
+      isPro     // optional
     } = JSON.parse(text);
     if (
       !selectedDateYear ||
@@ -76,12 +76,6 @@ serve(async (req: Request) => {
         error: "some data is missing in request body"
       }, 400);
     }
-    if (email && !isValidEmail(email)) {
-      return jsonResponse({ 
-        result: false, 
-        error: "invalid email"
-      }, 400);
-    }
 
     const result = {
       uid: userId,
@@ -101,7 +95,7 @@ serve(async (req: Request) => {
       name: null,
       currency: null,
       isPro: null,
-      emailOuter: null,
+      email: null,
       created_at: null
     }
     if (name) {
@@ -113,8 +107,8 @@ serve(async (req: Request) => {
     if (isPro === true || isPro === false) {
       result.isPro = isPro;
     }
-    if (email) {
-      result.emailOuter = email;
+    if (userEmailInner) {
+      result.email = userEmailInner;
     }
 
     const dateNow = new Date();
