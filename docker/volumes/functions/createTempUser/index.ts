@@ -89,5 +89,5 @@ const generateRandomPassword = (length = 12) => {
 }
 
 function generateRandomNumber() {
-  return Math.floor(10000000 + Math.random() * 90000000);
+  return (Math.random()+' ').substring(2,10)+(Math.random()+' ').substring(2,10);
 }
