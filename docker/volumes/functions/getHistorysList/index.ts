@@ -85,6 +85,7 @@ serve(async (req: Request) => {
     const { data: historysData, error: userError } = await supabaseClient
     .from('historys')
     .select('*')
+    .eq('isReady', true)
     .order(sort, { ascending: ascTyped })
     .range(offset, offset + limit - 1);
     if (userError && !historysData) {
